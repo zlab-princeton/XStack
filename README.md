@@ -8,6 +8,7 @@ Linrong Cai &nbsp;·&nbsp; Taiming Lu &nbsp;·&nbsp; Haozhe Chen &nbsp;·&nbsp; 
 
 Princeton University
 
+[![arXiv](https://img.shields.io/badge/arXiv-2611.08472-b31b1b)](https://arxiv.org/abs/2611.08472)
 [![Dataset](https://img.shields.io/badge/🤗_Dataset-XStack-ffcc4d)](https://huggingface.co/datasets/zlab-princeton/XStack)
 
 </div>
@@ -134,6 +135,7 @@ task, copy a neighbour's `task.yaml` and `criteria.json` and run
 @article{cai2026xstack,
   title={XStack: A Benchmark for ML Repo Migration},
   author={Cai, Linrong and Lu, Taiming and Chen, Haozhe and Liu, Zhuang},
+  journal={arXiv preprint arXiv:2611.08472},
   year={2026}
 }
 ```
