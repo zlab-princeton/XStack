@@ -1,0 +1,23 @@
+{
+  "repo": "tensorf",
+  "seed": 1337,
+  "dataset": "the Synthetic-NeRF lego scene (100 training views and 200 held-out test views at 800x800)",
+  "pipeline": "the source repository's TensoRF-VM-192 per-scene radiance-field reconstruction pipeline at its configs/lego.txt settings",
+  "bar_sentence": "a mean test-view PSNR of at least 36.10 dB on Synthetic-NeRF lego (published 36.46)",
+  "protocol_sentence": "(the source's own evaluation() protocol: all 200 transforms_test.json views rendered at 800x800, ground truth alpha-composited onto white, predictions clamped to [0,1], per-image PSNR computed first and then averaged over images, after exactly 30,000 optimisation steps; the band's upper bound 45.0 dB is a degenerate-report guard, not a metric ceiling)",
+  "bar": 36.1,
+  "bar2": 45.0,
+  "bar_cmp": "band",
+  "metric_re": "^(?!.*(?:^|[^a-z])(?:train|val|vali|valid|validation)(?:[^a-z]|$))(?!.*(?:view|image|img|frame|max|min|best|std|var|sem))(?:(?=.*psnr)(?=.*(?:^|[^a-z])(?:test|eval)).*|(?:.*/)?psnr$)",
+  "dataset_regex": "",
+  "grade_cmd": "python run_train.py --seed 1337 --out {OUT} --metrics {METRICS}",
+  "contract_lines": [],
+  "bar_provenance": {
+    "kind": "paper",
+    "quote": "Ours-VM-192-30k, Lego: 36.46",
+    "verified": true,
+    "note": "The quote is the Ours-VM-192-30k cell of the paper's Lego column (Table 7); the repository README publishes no number."
+  },
+  "expected_grade_wall_h": 6,
+  "phase2_recipe": "Run the source repository's Quick Start recipe, `python train.py --config configs/lego.txt`, with every setting from that config file and the remaining defaults of `opt.py`. Obtain the Synthetic-NeRF lego scene (the `nerf_synthetic/lego` folder with `transforms_train.json`, `transforms_test.json` and their PNG frames) and load it the way `dataLoader/blender.py` does: 800 by 800 (downsample 1.0), each RGBA PNG alpha-blended onto a white background, rays from `camera_angle_x`, scene bounding box [-1.5, 1.5] on each axis and near/far [2.0, 6.0], with the train split for fitting and the test split for evaluation. Fit the `TensorVMSplit` model with `n_lamb_sigma` [16,16,16] and `n_lamb_sh` [48,48,48], shading `MLP_Fea`, `fea2denseAct` softplus, `view_pe` 2, `fea_pe` 2, `data_dim_color` 27, `featureC` 128, `distance_scale` 25, `density_shift` -10 and `step_ratio` 0.5, starting from `N_voxel_init` 128^3 and upsampling toward `N_voxel_final` 300^3 at iterations 2000, 3000, 4000, 5500 and 7000 (log-spaced voxel counts), with alpha-mask updates at iterations 2000 and 4000, the bounding-box shrink at 2000, the training-ray re-filter at 4000, and the density L1 weight switching from 8e-5 to 4e-5 at the first alpha-mask update. Optimise on 4096 rays per iteration with the per-ray MSE loss, using Adam with betas (0.9, 0.99) at `lr_init` 0.02 and `lr_basis` 1e-3, multiplying the learning rate by 0.1^(1/30000) every iteration and rebuilding the optimizer at the initial rates after each upsample, for exactly 30,000 iterations. After training, as `render_test = 1` requires, run the source's `evaluation()` over the whole test split: every one of the 200 views of `transforms_test.json` rendered at 800 by 800 (`N_vis=-1`), predictions clamped to [0, 1], PSNR computed per image from that image's own MSE against the white-composited ground truth, then averaged over the 200 images (SSIM and LPIPS are extras the source also computes and are not required). The number to write is that mean test-view PSNR in dB, the value the source prints as `test all psnr`.\nWrite the metrics JSON with at least: {\"test_psnr\": float, \"n_iters\": int, \"n_test_views\": int, \"wall_seconds\": float, \"device_count\": int}"
+}

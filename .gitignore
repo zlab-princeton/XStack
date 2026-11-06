@@ -1,0 +1,25 @@
+# fetched by fetch_sources.py (task.yaml pins each source)
+tasks/*/source_torch/
+
+# per-machine configuration and work
+config.env
+/work/
+/results/
+*.log
+
+# python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# secrets and keys are never in the tree
+secrets/
+*.pem
+id_*
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp

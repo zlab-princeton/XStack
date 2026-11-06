@@ -1,0 +1,21 @@
+{
+  "dataset": "the source-generated addition dataset",
+  "pipeline": "the source repository's adder demo",
+  "bar_sentence": "at least 495 of 500 correct adder test answers",
+  "protocol_sentence": "scored by the source's own evaluation",
+  "bar": 495,
+  "bar_cmp": "ge",
+  "metric_re": "test.*(correct|acc|score)|(correct|acc|score).*test|final.*correct|correct.*final",
+  "repo": "mingpt",
+  "seed": 1337,
+  "dataset_regex": "",
+  "grade_cmd": "python run_train.py --seed 1337 --out {OUT} --metrics {METRICS}",
+  "bar_provenance": {
+    "kind": "rule",
+    "quote": "`adder_test_correct` is the graded number: PASS iff >= 495 of 500 (source expectation is 500/500; below 495 indicates a real defect).",
+    "verified": true,
+    "note": "minGPT publishes no adder result anywhere in the tree (projects/adder/readme.md is three lines), so 495/500 is our rule against the source's own \"%s final score: %d/%d\" print."
+  },
+  "expected_grade_wall_h": 0.2,
+  "phase2_recipe": "Run the source repository's adder demo, `projects/adder/adder.py`, at its default configuration: `ndigit` 2, the `gpt-nano` model (3 layers, 3 heads, embedding width 48, a vocabulary of the 10 digits, block size 6), and the source's trainer defaults except its own learning rate of 5e-4 (batch size 64, AdamW with betas 0.9/0.95, weight decay 0.1 on matrix weights, gradient-norm clip 1.0). Build the addition dataset the way the source does: all 10,000 two-digit problems permuted by the source's fixed generator seed, the first 500 held out as the test split and the rest used for training, each problem rendered as the digits of a, b and the reversed zero-padded sum, with the loss masked to the answer positions. Train with the source's sampling-with-replacement loader and, every 500 iterations, evaluate the way the source's `eval_split` does: feed the first four digits of each problem, greedily decode the three answer digits, reverse them, and count a problem correct when the decoded integer equals a plus b, over the whole training split and the whole 500-problem test split. The source's loop is open-ended, so apply this stop rule: stop when the test-split correct count has not improved for 5 consecutive evaluations, and in any case after at most 20,000 iterations. The number to report is the best test-split correct count seen at any evaluation of the run, out of the 500 test problems.\nWrite the metrics JSON with at least: {\"adder_test_correct\": int, \"adder_test_total\": int}"
+}

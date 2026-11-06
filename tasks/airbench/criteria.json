@@ -1,0 +1,23 @@
+{
+  "repo": "airbench",
+  "seed": 1337,
+  "dataset": "the CIFAR-10 dataset (the standard 50,000-image training and 10,000-image test splits, obtained by the source repository's own torchvision download)",
+  "pipeline": "the source repository's airbench94 CIFAR-10 speedrun training pipeline at its own 9.9-epoch (476-step) budget, run the way the script's own __main__ runs it",
+  "bar_sentence": "a test-time-augmented CIFAR-10 test accuracy of at least 0.9393, taken as the mean over the source's own 25-trial loop (published mean 94.01%, per-run stddev 0.128 points at n=10,000)",
+  "protocol_sentence": "(the source's own evaluate(model, test_loader, tta_level=2) over the whole 10,000-image test split with its 6-view mirror-and-translate averaging, returned on the 0-1 fraction scale; the band's upper bound 1.0 is the accuracy ceiling, and a percent-scaled report is rescaled /100 by the comparator rather than failing)",
+  "bar": 0.9393,
+  "bar2": 1.0,
+  "bar_cmp": "band",
+  "metric_re": "^(?!.*(?:^|[^a-z])(?:train|std|stdev|stddev|stderr|sem|var|variance|err|loss|time)(?:[^a-z]|$))(?=.*acc(?!um|el)).*$",
+  "dataset_regex": "",
+  "grade_cmd": "python run_train.py --seed 1337 --out {OUT} --metrics {METRICS}",
+  "contract_lines": [],
+  "bar_provenance": {
+    "kind": "paper",
+    "quote": "epochs: 1x, width: 1x, TTA: Yes, mean accuracy: 94.01%, test-set stddev: 0.128%, dist-wise stddev: 0.029%",
+    "verified": true,
+    "note": "Bar 0.9393 is 94.01 minus three standard errors of a 25-trial mean (0.128/sqrt(25)); 94.01 alone is also in the vendored tree at README.md:42 and legacy/airbench94.py:3, but only Table 4 carries the 0.128 stddev the tolerance uses."
+  },
+  "expected_grade_wall_h": 1.5,
+  "phase2_recipe": "Run the source repository's `legacy/airbench94.py` the way its own `__main__` runs it: 25 independent trainings via `main(run)` for `run` in 0 to 24, followed by the script's print of the mean and standard deviation of their accuracies. Each training uses the script's `hyp` dictionary unchanged: 9.9 epochs at batch size 1024 (476 optimizer steps, the last epoch cut short), the script's learning rate 11.5 per 1024 examples, momentum 0.85, decoupled weight decay 0.0153 per 1024 examples, a 64x bias learning-rate multiplier, label smoothing 0.2, the whitening-bias freeze after 3 epochs, the linear warmup-then-decay schedule, and the lookahead averaging over the whole state including BatchNorm statistics. Data is CIFAR-10 obtained by the script's own torchvision download: the 50,000-image training split with the script's flip-and-2-pixel-translate augmentation and the 10,000-image test split, both normalised with the script's `CIFAR_MEAN` and `CIFAR_STD`. The network is the script's `make_net` (the whitening conv initialised from the first 5,000 training images, three conv groups at widths 64/256/256, the 1/9 logit scale). At the end of each training, evaluate on the whole test split with the script's `evaluate(model, test_loader, tta_level=2)`, the mirror-and-translate test-time augmentation, on the 0 to 1 fraction scale. Report the mean of that test-time-augmented accuracy over the 25 trainings as the number, with its standard deviation and the trial count.\nWrite the metrics JSON with at least: {\"mean_tta_val_acc\": float, \"tta_val_acc_std\": float, \"num_trials\": int}"
+}

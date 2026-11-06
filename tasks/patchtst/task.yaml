@@ -1,0 +1,14 @@
+id: patchtst
+source_repo: https://github.com/yuqinie98/PatchTST
+source_commit: 204c21efe0b39603ad6e2ca640ef5896646ab1a9
+source_license: Apache-2.0
+source_dir: source_torch/PatchTST
+source_files: 86
+source_tree_sha256: afb5e77566e347c292dfa835b25c526efbb4f7224701c95421f51d154f7cb254
+source_drop:
+  - PatchTST_supervised/Formers/FEDformer
+  - PatchTST_supervised/Formers/Pyraformer
+  - pic
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

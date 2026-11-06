@@ -1,0 +1,15 @@
+id: nanochat_core
+source_repo: https://github.com/karpathy/nanochat
+source_commit: dc54a1a3077cab11d68fac4c5d1cd5c51f5d8c7a
+source_license: MIT
+source_dir: source_torch/nanochat_repo
+source_files: 44
+source_tree_sha256: a973b5b6006d584098ff6941e2930479f3d2bfc6ba013b795f87487c5fd21af4
+source_drop:
+  - .claude
+  - .gitignore
+  - dev
+  - uv.lock
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

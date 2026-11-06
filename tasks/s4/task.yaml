@@ -1,0 +1,53 @@
+id: s4
+source_repo: https://github.com/state-spaces/s4
+source_commit: e757cef57d89e448c413de7325ed5601aceaac13
+source_license: Apache-2.0
+source_dir: source_torch/s4
+source_files: 11
+source_tree_sha256: 3a1bdfb5f9dae3973941e95c29e857cdf8385cd4d9f277049a7c1962e4e8b7dc
+source_drop:
+  - .flake8
+  - .github
+  - .gitignore
+  - .isort.cfg
+  - .pre-commit-config.yaml
+  - CHANGELOG.md
+  - Makefile
+  - assets
+  - checkpoints
+  - configs
+  - extensions
+  - generate.py
+  - models/README.md
+  - models/dss
+  - models/hippo
+  - models/related
+  - models/s4/experiments.md
+  - models/s4/lssl.md
+  - models/s4nd
+  - models/sashimi
+  - notebooks
+  - requirements-dev.txt
+  - requirements.txt
+  - src/callbacks
+  - src/dataloaders
+  - src/models/README.md
+  - src/models/baselines
+  - src/models/functional
+  - src/models/hippo
+  - src/models/nn/adaptive_softmax.py
+  - src/models/nn/dxt.py
+  - src/models/nn/exprnn
+  - src/models/nn/gate.py
+  - src/models/nn/initialization.py
+  - src/models/nn/orthogonal.py
+  - src/models/nn/residual.py
+  - src/models/nn/utils.py
+  - src/models/s4
+  - src/models/sequence
+  - src/tasks
+  - src/utils
+  - train.py
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

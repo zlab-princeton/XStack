@@ -1,0 +1,13 @@
+id: modded_nanogpt
+source_repo: https://github.com/KellerJordan/modded-nanogpt
+source_commit: 1b51e26d304f647c7c12201b3f1513ee5a429ec4
+source_license: MIT
+source_dir: source_torch/modded-nanogpt
+source_files: 13
+source_tree_sha256: 4b3ef87959e84e1a23f8c687cc0dcc68cdcafb7d043224a9339619caa32a060b
+source_drop:
+  - img
+  - records
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

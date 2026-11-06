@@ -1,0 +1,25 @@
+{
+  "repo": "generative_recommenders",
+  "seed": 1337,
+  "dataset": "the MovieLens-20M dataset (ml-20m), downloaded and preprocessed the way the source repository does",
+  "pipeline": "the source repository's HSTU-large MovieLens-20M reproduction pipeline (configs/ml-20m/hstu-sampled-softmax-n128-large-final.gin)",
+  "bar_sentence": "a MovieLens-20M HR@10 of at least 0.3450 (the source's own 0-1 fraction; published 0.3556)",
+  "protocol_sentence": "under the source repository's own evaluation protocol (leave-one-out last interaction, ranked against the full 27,278-item catalog with the user's seen items filtered, all 138,493 users; the band's upper bound 1.0 is the metric ceiling, so a x100-scaled field cannot false-PASS)",
+  "bar": 0.345,
+  "bar2": 1.0,
+  "bar_cmp": "band",
+  "metric_re": "^(?!.*(train|loss|ndcg|mrr|partial|sampled(?![-_ ]?softmax)|batch|>=|ge_?4|rating|pos))(.*[^a-z]|^)(hr|hits?|hit[_ ]?rate|hitrate|recall)[^a-z0-9]{0,4}(at[^a-z0-9]{0,2})?10(?!\\d)",
+  "dataset_regex": "ml[-_ ]?20m|movielens[-_ ]?20m|ml20m",
+  "grade_cmd": "python run_train.py --seed 1337 --out {OUT} --metrics {METRICS}",
+  "contract_lines": [
+    "- The graded run trains the HSTU-large configuration on the MovieLens-20M dataset."
+  ],
+  "bar_provenance": {
+    "kind": "readme",
+    "quote": "Method: HSTU-large, HR@10: 0.3556 (+23.1%), NDCG@10: 0.2098 (+29.4%), HR@50: 0.6143 (+11.6%), NDCG@50: 0.2671 (+21.5%), HR@200: 0.8074 (+5.4%), NDCG@200: 0.2965 (+17.4%)",
+    "verified": true,
+    "note": "Bar 0.3450 is the HR@10 cell 0.3556 minus a 3 percent tolerance; the ML-1M HSTU-large row (0.3294, README.md:57) is the row the bar has to reject."
+  },
+  "expected_grade_wall_h": 2,
+  "phase2_recipe": "Run the source repository's MovieLens-20M HSTU-large recipe, `python3 main.py --gin_config_file=configs/ml-20m/hstu-sampled-softmax-n128-large-final.gin`, with every setting taken from that gin file and the remaining defaults of `train_fn` in `generative_recommenders/trainer/train.py`. Obtain and preprocess the data the way `preprocess_public_data.py` does for `ml-20m`: download `ml-20m.zip` from the GroupLens URL in `generative_recommenders/data/preprocessor.py`, run the source's `preprocess_rating` to produce `tmp/ml-20m/sasrec_format.csv`, and build the datasets as `generative_recommenders/data/reco_dataset.py` does, with each user's chronological history minus its last interaction as the training sequence (`ignore_last_n=1`) and the full history as the evaluation sequence (`ignore_last_n=0`), truncated to the 200 most recent items. Train the HSTU encoder at the gin settings, which are 16 blocks, 8 heads, dqk and dv of 32, item embedding dimension 256, dropout 0.2, L2-normalised user and item embeddings, the sampled softmax loss with 128 local negatives at temperature 0.05, AdamW with learning rate 1e-3, betas (0.9, 0.98) and weight decay 0, no warmup, local batch size 128, for 101 epochs. After every epoch run the source's full per-epoch evaluation over every user (the per-epoch evaluation logged under `eval_epoch`, not the 128-user batch-stat evaluation that runs every 100 steps): rank each user's held-out last item against the full item catalog from `movies.csv` with the user's already-seen items filtered out, and compute HR@10, NDCG@10, HR@50, NDCG@50 and MRR exactly as `eval_metrics_v2_from_tensors` in `generative_recommenders/data/eval.py` does. The number to write is the full-evaluation HR@10 of the final epoch as a fraction between 0 and 1, together with the highest full-evaluation HR@10 seen at any epoch and the final-epoch NDCG@10.\nWrite the metrics JSON with at least: {\"hr@10\": float, \"best_hr@10\": float, \"ndcg@10\": float, \"epochs\": int, \"num_eval_users\": int, \"wall_seconds\": float, \"device_count\": int}"
+}

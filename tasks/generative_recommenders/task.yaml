@@ -1,0 +1,11 @@
+id: generative_recommenders
+source_repo: https://github.com/meta-recsys/generative-recommenders
+source_commit: fb0ba644be8dd1c7b072199c9c8bc6ce3adaf3d8
+source_license: Apache-2.0
+source_dir: source_torch/generative-recommenders
+source_files: 67
+source_tree_sha256: 805952475eca5328488a017e4d703dcb1e5e03297c813ee5515959fa1235d1af
+source_drop: []
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

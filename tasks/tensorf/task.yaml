@@ -1,0 +1,11 @@
+id: tensorf
+source_repo: https://github.com/apchenstu/TensoRF
+source_commit: 6a1e23b10b9521221049aec843ab370a747a7982
+source_license: MIT
+source_dir: source_torch/TensoRF
+source_files: 25
+source_tree_sha256: a46faaecdd91a538c6728f6dab0d761949dcb1696d7119db5c31f39d27285ae2
+source_drop: []
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

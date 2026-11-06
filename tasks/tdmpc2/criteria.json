@@ -1,0 +1,25 @@
+{
+  "repo": "tdmpc2",
+  "seed": 1337,
+  "dataset": "the DeepMind Control Suite task walker-run, simulated with MuJoCo through the dm_control package (no external dataset)",
+  "pipeline": "the source repository's single-task online TD-MPC2 training pipeline at its default hyperparameters",
+  "bar_sentence": "a mean evaluation return of at least 750.0 over the source's 10-episode evaluation on DMControl walker-run, reached at any evaluation checkpoint at or before 500,000 environment steps (published 3-seed mean 820.4 at 500k, worst seed 811.6; the repo's own SAC baseline never exceeds 747.1 in 4M steps)",
+  "protocol_sentence": "(the source's own OnlineTrainer.eval protocol: the mean undiscounted return over 10 episodes played with eval_mode=True, 500 agent steps per episode at action-repeat 2, so 1,000 dm_control control steps; the band's upper bound 1000 is the task's reward ceiling, 1,000 control steps times a per-step reward of at most 1, so a mis-scaled field cannot false-PASS)",
+  "bar": 750.0,
+  "bar2": 1000.0,
+  "bar_cmp": "band",
+  "metric_re": "^(?=.*(?:reward|return))(?!.*(?:loss|coef|scale|norm|entropy|pred|target|discount|buffer|per_?step|std|var|_sem))(?!.*(?:^|[^a-z])train(?:ing)?(?:[^a-z]|$)).*",
+  "dataset_regex": "",
+  "grade_cmd": "python run_train.py --seed 1337 --task walker-run --max-steps 500000 --out {OUT} --metrics {METRICS}",
+  "contract_lines": [
+    "- `run_train.py` must additionally honor `--task NAME` (the environment task to train on, named as the source repository names its tasks) and `--max-steps N` (a cap on the number of environment steps to train for) when passed."
+  ],
+  "bar_provenance": {
+    "kind": "readme",
+    "quote": "step: 500000, reward: 811.6, seed: 1",
+    "verified": true,
+    "note": "Kind \"readme\" stands for an in-tree published result, here a committed benchmark CSV rather than README.md; this is the worst of the three seeds the file gives at 500,000 steps (815.2 at :7, 811.6 at :48, 834.4 at :89, mean 820.4) and the bar 750.0 sits 8.0 percent below it."
+  },
+  "expected_grade_wall_h": 6,
+  "phase2_recipe": "Run the source repository's single-task online recipe, the equivalent of `python train.py task=walker-run steps=500000` with every other setting at its `config.yaml` default; the invocation passes `--task walker-run --max-steps 500000`, and those two values must be mapped onto the source's `task` and `steps` arguments. Build the environment as `envs/dmcontrol.py` does: `suite.load('walker', 'run')` with the run seed, state observations, actions rescaled to [-1, 1] and applied twice per agent step, and a 500-step episode timeout. Use the default architecture (`model_size` left unset, which gives the 5M-parameter configuration of `config.yaml`), batch size 256, learning rate 3e-4, and the planning, actor and critic defaults of `config.yaml`. Follow `OnlineTrainer.train` in `trainer/online_trainer.py`: uniformly random actions for the first `seed_steps` environment steps (max(1000, 5 times the episode length)), a burst of `seed_steps` updates when that count is reached, and from then on one gradient update per environment step until the step counter passes 500,000. Every `eval_freq` (50,000) environment steps, starting at step 0 and at the next episode boundary, run `OnlineTrainer.eval`: 10 episodes with `eval_mode=True`, and record the mean undiscounted return over those 10 episodes, the quantity the source logs as `eval/episode_reward`. The numbers to write are that mean evaluation return at the final evaluation, the highest mean evaluation return over all evaluations of the run, and the environment step at which the highest occurred, each as a top-level scalar field (a per-evaluation history may be added under a separate key but does not replace them).\nWrite the metrics JSON with at least: {\"eval_episode_reward_best\": float, \"eval_episode_reward_final\": float, \"eval_step_best\": int, \"env_steps\": int, \"wall_seconds\": float, \"device_count\": int}"
+}

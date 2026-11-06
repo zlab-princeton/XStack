@@ -1,0 +1,11 @@
+id: makemore
+source_repo: https://github.com/karpathy/makemore
+source_commit: 988aa59e4d8fefa526d06f3b453ad116258398d4
+source_license: MIT
+source_dir: source_torch/makemore
+source_files: 4
+source_tree_sha256: bbff2dd5575af05617ba6ab9956b440736a4839b7b86239be98b5c4551d1cbdb
+source_drop: []
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

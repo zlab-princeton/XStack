@@ -1,0 +1,11 @@
+id: deepspeech
+source_repo: https://github.com/SeanNaren/deepspeech.pytorch
+source_commit: b88a631ef6b96553e16bbaa5bd6a621435bed278
+source_license: MIT
+source_dir: source_torch/deepspeech.pytorch
+source_files: 58
+source_tree_sha256: 8d2d5f0b6d25d0d0cce21f9c81813f8b95d4ec82e3f30a09966c7d3ad4293ffe
+source_drop: []
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

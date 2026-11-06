@@ -1,0 +1,12 @@
+id: nanovlm
+source_repo: https://github.com/huggingface/nanoVLM
+source_commit: 6ba9082e16f1fc8c21a1f8d0c54b26c9233c8771
+source_license: Apache-2.0
+source_dir: source_torch/nanoVLM
+source_files: 20
+source_tree_sha256: 14eb343ec3235e6fd4cb0779a996c54af994c5a08993ccfef71c36b7034a1885
+source_drop:
+  - assets
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

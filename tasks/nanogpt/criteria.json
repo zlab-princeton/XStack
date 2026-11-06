@@ -1,0 +1,25 @@
+{
+  "repo": "nanogpt",
+  "seed": 1337,
+  "dataset": "the OpenWebText dataset",
+  "pipeline": "the source repository's GPT-2 reproduction pipeline",
+  "bar_sentence": "a validation loss bar at the graded iteration budget",
+  "protocol_sentence": "under the source repository's own evaluation protocol",
+  "bar": 3.12,
+  "bar_cmp": "le",
+  "dataset_regex": "openwebtext|open[-_ ]?web[-_ ]?text|\\bowt\\b",
+  "metric_re": "val.*loss|loss.*val",
+  "grade_cmd": "python run_train.py --max-iters 120000 --seed 1337 --out {OUT} --metrics {METRICS}",
+  "contract_lines": [
+    "- `run_train.py` must honor `--max-iters N` (a cap on optimizer iterations) when passed.",
+    "- The graded run is the repository's GPT-2 (124M) reproduction on OpenWebText."
+  ],
+  "bar_provenance": {
+    "kind": "readme",
+    "quote": "| gpt2 | 124M         | 3.11  | 3.12     |",
+    "verified": true,
+    "note": "The bar is the val-loss cell of the GPT-2 124M row, 3.12, used verbatim with comparator le at the 120,000-iteration cap; no tolerance is added."
+  },
+  "expected_grade_wall_h": 11,
+  "phase2_recipe": "Prepare the data the way the source repository does: `data/openwebtext/prepare.py` downloads OpenWebText through the `datasets` library, holds out a 0.05% validation split (shuffle seed 2357), tokenizes with the GPT-2 BPE via `tiktoken` with an end-of-text token appended to each document, and writes `train.bin` and `val.bin` as `uint16` token streams. Train the GPT-2 (124M) OpenWebText reproduction exactly as `train.py config/train_gpt2.py` defines it: 12 layers, 12 heads, embedding width 768, block size 1024, no bias, dropout 0.0, micro-batch 12 with 40 gradient-accumulation steps (491,520 tokens per optimizer iteration in total, however the work is distributed), AdamW with peak learning rate 6e-4, betas 0.9 and 0.95, weight decay 0.1, gradient clipping 1.0, 2,000 warmup iterations, and cosine decay to a minimum learning rate of 6e-5 at iteration 600,000. Keep that learning-rate schedule exactly as written: `--max-iters` is a cap on optimizer iterations that stops training early and does not rescale the schedule, and the invocation supplies `--max-iters 120000`. Every 1,000 optimizer iterations, including iteration 0, evaluate the way the source's `estimate_loss` does: 200 randomly sampled batches of 12 sequences of 1,024 tokens from `val.bin`, mean cross-entropy over the 200 batches. Record the validation loss at the last evaluation before stopping and the lowest validation loss seen at any evaluation (the running minimum the source keeps as `best_val_loss`), together with the number of optimizer iterations actually run, the total training tokens consumed, the wall-clock seconds of the run, and the number of devices used.\nWrite the metrics JSON with at least: {\"final_val_loss\": float, \"best_val_loss\": float, \"iters_run\": int, \"tokens_seen\": int, \"wall_seconds\": float, \"device_count\": int}"
+}

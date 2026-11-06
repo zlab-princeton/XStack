@@ -1,0 +1,25 @@
+{
+  "repo": "nanochat_core",
+  "seed": 1337,
+  "dataset": "the source repository's own pretraining corpus",
+  "pipeline": "the source repository's flagship speedrun pipeline",
+  "bar_sentence": "a base-evaluation-suite score of at least 0.256525",
+  "protocol_sentence": "computed with the source's own evaluation bundle and conventions",
+  "bar": 0.256525,
+  "bar_cmp": "band",
+  "dataset_regex": "",
+  "metric_re": "core",
+  "grade_cmd": "python run_train.py --seed 1337 --out {OUT} --metrics {METRICS}",
+  "contract_lines": [
+    "- `run_train.py` must honor `--max-iters N` (a cap on optimizer iterations) when passed."
+  ],
+  "bar2": 1.0,
+  "bar_provenance": {
+    "kind": "readme",
+    "quote": "The GPT-2 CORE score is 0.256525.",
+    "verified": true,
+    "note": "The bar is the repository's own success threshold (GPT-2 XL's CORE under nanochat's base_eval), not the pinned recipe's own outcome of 0.2626; README.md:193 restates it as 'getting a CORE score above 0.256525'."
+  },
+  "expected_grade_wall_h": 7,
+  "phase2_recipe": "Run the source repository's `runs/speedrun.sh` up to and including the base-model evaluation, at its own scale. Obtain the pretraining data the way the script does with `python -m nanochat.dataset -n 170` (170 training shards of the ClimbMix parquet set that `nanochat/dataset.py` downloads, plus the validation shard it always fetches), and train the tokenizer with `scripts.tok_train` at its defaults (vocabulary size 32,768 on the first 2 billion characters). Pretrain with `scripts.base_train` at the script's flags `--depth=24 --target-param-data-ratio=8 --device-batch-size=16` and everything else at the script's defaults (the `--fp8` flag selects a GPU precision mode and fixes no other setting): sequence length 2,048, the total batch size, learning-rate scaling and weight-decay scaling the script derives for that depth, and the number of optimizer iterations it derives from the data-to-parameter ratio rule, which for this configuration is 5,568 iterations at a total batch of 1,048,576 tokens; do not apply any `--max-iters` cap. Then run the source's base evaluation, `scripts.base_eval` at its defaults, on the final model: the CORE evaluation over every task in the source's evaluation bundle (`eval_bundle.zip` from the URL in `scripts/base_eval.py`), using all examples of each task (`--max-per-task -1`), scoring each task as the source's `evaluate_task` does, centering each accuracy against the bundle's random baseline and averaging the centered results into `core_metric`, plus bits per byte on the validation split over the default `--split-tokens` count. The number to write is that `core_metric` as `core_score`, on the source's own 0 to 1 scale (a centered accuracy, not a percent), with the validation bits per byte as `val_bpb`.\nWrite the metrics JSON with at least: {\"core_score\": float, \"val_bpb\": float, \"tokens_seen\": int, \"wall_seconds\": float, \"device_count\": int}"
+}

@@ -1,0 +1,13 @@
+id: simcse
+source_repo: https://github.com/princeton-nlp/SimCSE
+source_commit: 49fa580a853752ede55b8c76d9debf748e214d3f
+source_license: MIT
+source_dir: source_torch/simcse
+source_files: 59
+source_tree_sha256: a75c53c270539bdcff30d261bb2104c8fc411bd87f214089141bbe6135af315e
+source_drop:
+  - figure
+  - slides
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

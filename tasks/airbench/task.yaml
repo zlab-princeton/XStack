@@ -1,0 +1,11 @@
+id: airbench
+source_repo: https://github.com/KellerJordan/cifar10-airbench
+source_commit: 4c1b6d1e3889b037efadcfd5c0ea65b246592362
+source_license: MIT
+source_dir: source_torch/cifar10-airbench
+source_files: 19
+source_tree_sha256: 7f67cfa9b1382cb9540279f7f816424117ff912ea98c507adc04ca852223ee69
+source_drop: []
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

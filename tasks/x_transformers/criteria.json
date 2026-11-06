@@ -1,0 +1,22 @@
+{
+  "repo": "x_transformers",
+  "seed": 1337,
+  "dataset": "the enwik8 dataset",
+  "pipeline": "the source repository's canonical enwik8 training demo",
+  "bar_sentence": "a validation loss between 0.8788 and 0.9788",
+  "protocol_sentence": "(the anchor band of the unmodified source demo, seeds within 0.05)",
+  "bar": 0.878835,
+  "bar2": 0.978835,
+  "bar_cmp": "band",
+  "metric_re": "smoothed.*val.*loss(?!.*window)|val.*loss(?!.*window)|loss.*val(?!.*window)",
+  "dataset_regex": "",
+  "grade_cmd": "python run_train.py --seed 1337 --out {OUT} --metrics {METRICS}",
+  "bar_provenance": {
+    "kind": "anchor",
+    "quote": "anchor1 smoothed_last10: 0.9061592996120453, anchor2 smoothed_last10: 0.9515106797218322, mean: 0.9288349896669388, spread: 0.0453513801097869",
+    "verified": true,
+    "note": "The bar 0.878835 is the anchor mean 0.9288349896669388 minus the pre-registered 0.05 band. The anchor spread 0.0454 nearly saturates the 0.05 band."
+  },
+  "expected_grade_wall_h": 1.5,
+  "phase2_recipe": "Run the source repository's enwik8 demo `train_enwik8.py` (at the repository root) with its `train` defaults and nothing changed in substance. Data is the enwik8 corpus named in the source's `data/README.md`, read from `./data/enwik8.gz` as the first 95e6 decompressed bytes, split at byte 90e6 into training and validation, and sampled as random windows of `seq_len` 1024 plus one byte. The model is the demo's `TransformerWrapper` with 256 tokens, `max_seq_len` 1024 and a `Decoder` of dim 512, depth 6, 8 heads, `rotary_pos_emb=False`, `polar_pos_emb=True` and `pre_and_post_norm=True`, wrapped in `AutoregressiveWrapper`. Train for the demo's full `num_batches` of 100,000 optimizer steps, each accumulating `gradient_accumulate_every` 4 micro-batches of `batch_size` 4, with Adam at learning rate 1e-4 and gradient-norm clipping at 0.5. Keep the demo's validation protocol and cadence unchanged: every 100 steps, one validation batch of the demo's batch size and sequence length drawn uniformly at random from the validation split, in eval mode; and keep its sample generation every 500 steps with `generate_length` equal to `seq_len` and KV-cache decoding. Report every validation loss in order, the last one, and the mean of the last 10, plus the counts the field names describe: optimizer steps run, training tokens seen (steps times accumulation times batch size times sequence length), training wall seconds, device count, the sha256 of the 95e6 bytes as read, and the byte sizes of the two splits.\nWrite the metrics JSON with at least: {\"final_val_loss\": float, \"smoothed_val_loss\": float, \"val_losses\": [float, ...], \"iters_run\": int, \"tokens_seen\": int, \"wall_seconds\": float, \"device_count\": int, \"data_sha256\": str, \"train_split_bytes\": int, \"val_split_bytes\": int}"
+}

@@ -1,0 +1,12 @@
+id: tgn
+source_repo: https://github.com/twitter-research/tgn
+source_commit: d55bbe678acabb9fc3879c408fd1f2e15919667c
+source_license: Apache-2.0
+source_dir: source_torch/tgn
+source_files: 19
+source_tree_sha256: edf31095118a6dc2d8bbb6a608786b11ecba3f69a2ff8c7f2e5e4aaf003492a1
+source_drop:
+  - figures
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

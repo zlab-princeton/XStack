@@ -1,0 +1,12 @@
+id: lora
+source_repo: https://github.com/microsoft/LoRA
+source_commit: c4593f060e6a368d7bb5af5273b8e42810cdef90
+source_license: MIT
+source_dir: source_torch/lora
+source_files: 47
+source_tree_sha256: 1e161c11010c7e5295949ee554e6073d2f658819f5590f459b02a2989e013e65
+source_drop:
+  - examples/NLU
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

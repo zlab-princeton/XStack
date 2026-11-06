@@ -1,0 +1,22 @@
+{
+  "repo": "llama2c",
+  "seed": 1337,
+  "dataset": "the TinyStories dataset",
+  "pipeline": "the source repository's default TinyStories Llama-2 pretraining pipeline (train.py defaults)",
+  "bar_sentence": "a best validation loss of at most 1.130 at the source's own 100,000-iteration default horizon (two-seed anchor of the unmodified source: 1.0992 / 1.0978, plus 0.03)",
+  "protocol_sentence": "under the source repository's own evaluation protocol (estimate_loss over 100 fixed-order batches of the shard-0 validation split)",
+  "bar": 1.13,
+  "bar_cmp": "le",
+  "metric_re": "val.*loss|loss.*val",
+  "dataset_regex": "",
+  "grade_cmd": "python run_train.py --seed 1337 --out {OUT} --metrics {METRICS}",
+  "contract_lines": [],
+  "bar_provenance": {
+    "kind": "anchor",
+    "quote": "seed 1337 best_val_loss 1.0992, seed 2024 best_val_loss 1.0978, both at iteration 100000 (final = best), 51 evals each, ~2.5 h per seed; spread 0.0014",
+    "verified": true,
+    "note": "No published number is usable at the graded horizon (the README's 1.072 is at 300k iterations, 3x the train.py default), so the bar is the pre-registered ceil3(worse anchor seed + 0.03) = 1.130."
+  },
+  "expected_grade_wall_h": 3,
+  "phase2_recipe": "Prepare TinyStories the way the source repository does: `python tinystories.py download` fetches `TinyStories_all_data.tar.gz` from the `roneneldan/TinyStories` dataset repository and unpacks its JSON shards, and `python tinystories.py pretokenize` encodes every story with the vendored Llama-2 `tokenizer.model` (32,000-token vocabulary, BOS prepended, no EOS) into `uint16` `.bin` shards, of which shard 0 is the validation split and shards 1 onward are the training split. Then run `python train.py` at its own defaults with nothing overridden: dim 288, 6 layers, 6 heads, 6 key-value heads, `multiple_of` 32, max sequence length 256, dropout 0.0, micro-batch 128 with 4 gradient-accumulation steps (131,072 tokens per iteration), AdamW with peak learning rate 5e-4, betas 0.9 and 0.95, weight decay 0.1, gradient clipping 1.0, 1,000 warmup iterations, and cosine decay to a minimum learning rate of 0.0 at iteration 100,000. Train for the source's default `max_iters` of 100,000 optimizer iterations and stop there. Every 2,000 iterations, including iteration 0, evaluate the way the source's `estimate_loss` does: 100 batches of 128 sequences of 256 tokens from the validation shard, drawn by a fresh instance of the source's batch iterator (fixed shuffle seed 42, so every evaluation scores the same subsample), mean cross-entropy over the 100 batches. The number to report is the lowest validation loss observed at any evaluation over the run, the running minimum the source keeps as `best_val_loss`, together with the number of optimizer iterations actually run.\nWrite the metrics JSON with at least: {\"best_val_loss\": float, \"iters_run\": int}"
+}

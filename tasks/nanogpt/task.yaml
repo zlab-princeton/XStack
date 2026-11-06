@@ -1,0 +1,16 @@
+id: nanogpt
+source_repo: https://github.com/karpathy/nanoGPT
+source_commit: 3adf61e154c3fe3fca428ad6bc3818b27a3b8291
+source_license: MIT
+source_dir: source_torch/nanogpt
+source_files: 20
+source_tree_sha256: 5fad491f81a735ced8cb887c091a79f7fe4215023a09d40e4a9dc596af595ab4
+source_drop:
+  - .gitattributes
+  - .gitignore
+  - assets
+  - scaling_laws.ipynb
+  - transformer_sizing.ipynb
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

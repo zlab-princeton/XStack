@@ -1,0 +1,11 @@
+id: tdmpc2
+source_repo: https://github.com/nicklashansen/tdmpc2
+source_commit: e9f59321933cbc8e11a002b842adc7d4ffae8ff1
+source_license: MIT
+source_dir: source_torch/tdmpc2
+source_files: 492
+source_tree_sha256: 6d2564ebde5cdc53a21b3eaa7c525ed7f9331297e49a31fcadbca62451c9153e
+source_drop: []
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

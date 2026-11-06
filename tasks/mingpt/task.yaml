@@ -1,0 +1,15 @@
+id: mingpt
+source_repo: https://github.com/karpathy/minGPT
+source_commit: 37baab71b9abea1b76ab957409a1cc2fbfba8a26
+source_license: MIT
+source_dir: source_torch/minGPT
+source_files: 14
+source_tree_sha256: e2695296b424109c28798e69b2e3cf882962099ed6619c1ab6b580443e4c1c6b
+source_drop:
+  - .gitignore
+  - demo.ipynb
+  - generate.ipynb
+  - mingpt.jpg
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md

@@ -1,0 +1,11 @@
+id: llama2c
+source_repo: https://github.com/karpathy/llama2.c
+source_commit: 350e04fe35433e6d2941dce5a1f53308f87058eb
+source_license: MIT
+source_dir: source_torch/llama2c
+source_files: 25
+source_tree_sha256: c4e6cfd3d2939f5c43bdde3b9aa4ea4b3110fc1bb64c5a43049f878de7961eaf
+source_drop: []
+criteria: criteria.json
+prompt: prompt.md
+phase2: phase2.md
