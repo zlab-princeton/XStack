@@ -11,7 +11,9 @@ The rules:
   3. a value is rescaled between percent and fraction only when the field is a rate-like
      measure (accuracy, BLEU, F1, HR, NDCG, ...): a loss is never divided by 100;
   4. a band bar does not pick "the first value inside the band" among several fields: the
-     field is chosen by rule 2 first, then compared.
+     field is chosen by rule 2 first, then compared;
+  5. a nested field is read by its full path (val/mse counts as val_mse), so the task
+     pattern's exclusions also apply to the parent keys.
 """
 import json, math, re, sys
 
@@ -25,8 +27,8 @@ def compare(path, bar, ds_re, metric_re, cmp_, bar2, log_path=""):
         m = json.load(open(path))
     except Exception:
         return "FAIL run ok but no readable metrics JSON"
-    cands, ds_names = [], []   # (path, value); candidacy is judged on the INNERMOST key (as before),
-    # the full path only excludes reference-like / training-split parents and prefers test over val
+    cands, ds_names = [], []   # (path, value); a field is found by its INNERMOST key, then the full
+    # path must pass too (rule 5), so nesting is free but an excluded parent excludes the field
     def named(kl):   # the candidacy predicate on a key name
         return bool(re.search(metric_re, kl)) if metric_re else ("val" in kl and "loss" in kl)
     def walk(o, key="", path="", in_list=False):
@@ -59,6 +61,8 @@ def compare(path, bar, ds_re, metric_re, cmp_, bar2, log_path=""):
     walk(m)
     kept = [(k, v) for k, v in cands if not REF_RE.search(k)]          # rule 1 (path-wide)
     cands = kept
+    if metric_re:                                                      # rule 5
+        cands = [(k, v) for k, v in cands if "/" not in k or re.search(metric_re, k.replace("/", "_"))]
     def alternatives(rx):
         parts, depth, cur, esc, cls = [], 0, "", False, False
         for ch in rx:
